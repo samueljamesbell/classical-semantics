@@ -4,11 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+ipython = "*"
 jupyter = "*"
-requests = "*"
+keras = "*"
 lxml = "*"
-tensorflow = "*"
+numpy = "*"
+requests = "*"
 spotipy = "*"
+tensorflow = "*"
 
 [dev-packages]
 

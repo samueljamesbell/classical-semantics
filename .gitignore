@@ -1,1 +1,5 @@
+# MacOS
+.DS_Store
+
+# Jupyter
 *-checkpoint.ipynb
