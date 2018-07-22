@@ -12,6 +12,8 @@ numpy = "*"
 requests = "*"
 spotipy = "*"
 tensorflow = "*"
+nltk = "*"
+"beautifulsoup4" = "*"
 
 [dev-packages]
 
