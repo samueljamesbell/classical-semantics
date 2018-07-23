@@ -3,3 +3,7 @@
 
 # Jupyter
 *-checkpoint.ipynb
+
+# Python
+*.swp
+**/__pycache__
