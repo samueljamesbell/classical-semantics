@@ -65,10 +65,10 @@ class Vocabulary(object):
         if not tokens:
             return None
 
-        return (self.to_id(t) for t in tokens)
+        return [self.to_id(t) for t in tokens]
 
     def to_tokens(self, ids):
-        return (self.to_token(id) for id in ids)
+        return [self.to_token(id) for id in ids]
 
 
 def _inverse(d):

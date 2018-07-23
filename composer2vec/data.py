@@ -1,10 +1,19 @@
 import functools
 import itertools 
+import logging
+from progressbar import progressbar
+import random
+import re
 
 from bs4 import BeautifulSoup
 from keras.utils import to_categorical
 from nltk.tokenize import word_tokenize
+import numpy as np
 import requests
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 def composers(path):
@@ -41,15 +50,19 @@ def tokens(text):
 
 @functools.lru_cache()
 def tokens_by_composer_id(path):
-    return {c[0]: tokens(text(soup(c[-1]))) for c[0] in composers(path)}
+    logger.info('Fetching composer Wikipedia entries')
+    return {c[0]: tokens(text(soup(c[-1]))) for c in progressbar(composers(path))}
 
 
 def data_generator(token_ids_by_composer_id, window_size, vocab_size):
     assert window_size % 2 == 0, 'window_size must be even'
 
     offset = window_size // 2
+
+    composer_ids = list(token_ids_by_composer_id.keys())
   
-    for composer_id, token_ids in itertools.cycle(composers.items()):
+    for composer_id in progressbar(itertools.cycle(composer_ids)):
+        token_ids = token_ids_by_composer_id[composer_id]
         num_tokens = len(token_ids)
     
         if num_tokens <= window_size:

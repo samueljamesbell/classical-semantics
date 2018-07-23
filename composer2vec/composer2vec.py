@@ -1,16 +1,18 @@
 import argparse
 import itertools
+import pickle
 
 import nltk
 
 import data
 import model
+import vocab
 
 
 nltk.download('punkt')
 
 
-_DEFAULT_WINDOW_SIZE = 32
+_DEFAULT_WINDOW_SIZE = 8
 
 
 def _parse_args():
@@ -20,45 +22,56 @@ def _parse_args():
                         
     parser.add_argument('--save', help='Path to save model')
     parser.add_argument('--save_vocab', help='Path to save vocab file')
+    parser.add_argument('--save_composers', help='Path to save composers file')
     parser.add_argument('--load', help='Path to load model')
     parser.add_argument('--load_vocab', help='Path to load vocab file')
+    parser.add_argument('--load_composers', help='Path to load composers file')
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
 
 def _main():
     args = _parse_args()
 
     if args.train:
-        tokens_by_composer_id = data.tokens_by_composer_id(args.path)
+        if args.load_composers:
+            with open(args.load_composers, 'rb') as f:
+                tokens_by_composer_id = pickle.load(f)
+        else:
+            train_path, = args.train
+            tokens_by_composer_id = data.tokens_by_composer_id(train_path)
+            if args.save_composers:
+                with open(args.save_composers, 'wb') as f:
+                    pickle.dump(tokens_by_composer_id, f)
+
         num_composers = len(tokens_by_composer_id)
 
-        vocab = vocab.Vocab()
+        v = vocab.Vocabulary()
         if args.load_vocab:
-            vocab.load(args.load_vocab)
+            v.load(args.load_vocab)
         else:
             all_tokens = list(itertools.chain.from_iterable(tokens_by_composer_id.values()))
-            vocab.build(all_tokens)
+            v.build(all_tokens)
 
             if args.save_vocab:
-                vocab.save(args.save_vocab)
+                v.save(args.save_vocab)
 
-        token_ids_by_composer_id = {c: v.to_ids(t) for c, t in tokens_by_composer_id}
+        token_ids_by_composer_id = {c: v.to_ids(t) for c, t in tokens_by_composer_id.items()}
 
         all_data = data.batch(
                 data.data_generator(
                     token_ids_by_composer_id,
                     _DEFAULT_WINDOW_SIZE,
-                    vocab.size))
+                    v.size))
 
-        m = model.Model(_DEFAULT_WINDOW_SIZE,
-                        vocab.size,
+        m = model.Composer2VecModel(_DEFAULT_WINDOW_SIZE,
+                        v.size,
                         num_composers)
         
         m.build()
         m.compile()
 
-        m.train(all_data())
+        m.train(all_data)
 
         if args.save:
             m.save(args.save)
