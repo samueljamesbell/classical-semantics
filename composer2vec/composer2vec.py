@@ -13,6 +13,7 @@ nltk.download('punkt')
 
 
 _DEFAULT_WINDOW_SIZE = 8
+_DEFAULT_VOCAB_SIZE = 10000
 
 
 def _parse_args():
@@ -51,7 +52,7 @@ def _main():
             v.load(args.load_vocab)
         else:
             all_tokens = list(itertools.chain.from_iterable(tokens_by_composer_id.values()))
-            v.build(all_tokens)
+            v.build(all_tokens, max_size=_DEFAULT_VOCAB_SIZE)
 
             if args.save_vocab:
                 v.save(args.save_vocab)

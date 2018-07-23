@@ -63,7 +63,7 @@ class Vocabulary(object):
 
     def to_ids(self, tokens):
         if not tokens:
-            return None
+            return []
 
         return [self.to_id(t) for t in tokens]
 

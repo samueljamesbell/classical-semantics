@@ -1,3 +1,5 @@
+import logging
+
 from keras.callbacks import EarlyStopping
 from keras.layers import Average, Concatenate, Dense, Embedding, Input, Lambda
 from keras.models import Model
@@ -46,7 +48,7 @@ class Composer2VecModel(object):
                             loss='categorical_crossentropy',
                             metrics=['categorical_accuracy'])
 
-    def train(self, generator, steps_per_epoch=10000, epochs=1000):
+    def train(self, generator, steps_per_epoch=10000, epochs=250):
         history = self._model.fit_generator(
 	    generator,
 	    callbacks=[
