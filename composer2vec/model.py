@@ -2,13 +2,27 @@ import logging
 
 from keras.callbacks import EarlyStopping
 from keras.layers import Average, Concatenate, Dense, Embedding, Input, Lambda
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.optimizers import SGD
 import tensorflow as tf
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+
+def _split(window_size):
+    def _lambda(tensor):
+        import tensorflow as tf
+        return tf.split(tensor, window_size + 1, axis=1)
+    return _lambda
+
+
+def _squeeze():
+    def _lambda(tensor):
+        import tensorflow as tf
+        return tf.squeeze(tensor, axis=1)
+    return _lambda
 
 
 class Composer2VecModel(object):
@@ -32,9 +46,9 @@ class Composer2VecModel(object):
         embedded_composer = Embedding(input_dim=self._num_composers, output_dim=300, input_length=1)(composer_input)
       
         embedded = Concatenate(axis=1)([embedded_composer, embedded_sequence])
-        split = Lambda(lambda t: tf.split(t, self._window_size + 1, axis=1))(embedded)
+        split = Lambda(_split(self._window_size))(embedded)
         averaged = Average()(split)
-        squeezed = Lambda(lambda t: tf.squeeze(t, axis=1))(averaged)
+        squeezed = Lambda(_squeeze())(averaged)
       
         softmax = Dense(self._vocab_size, activation='softmax')(squeezed)
       
@@ -62,3 +76,7 @@ class Composer2VecModel(object):
     def save(self, path):
         logger.info('Saving model to %s', path)
         self._model.save(path)
+
+    def load(self, path):
+        logger.info('Loading model from %s', path)
+        self._model = load_model(path)
