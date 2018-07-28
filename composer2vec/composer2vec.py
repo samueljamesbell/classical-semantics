@@ -24,6 +24,7 @@ def _parse_args():
     parser.add_argument('--save', help='Path to save model')
     parser.add_argument('--save_vocab', help='Path to save vocab file')
     parser.add_argument('--save_composers', help='Path to save composers file')
+    parser.add_argument('--save_composer_embeddings', help='Path to save composer embeddings file')
     parser.add_argument('--load', help='Path to load model')
     parser.add_argument('--load_vocab', help='Path to load vocab file')
     parser.add_argument('--load_composers', help='Path to load composers file')
@@ -80,6 +81,9 @@ def _main():
 
     if args.save:
         m.save(args.save)
+
+    if args.save_composer_embeddings:
+        m.save_composer_embeddings(args.save_composer_embeddings)
 
 
 if __name__ == '__main__':

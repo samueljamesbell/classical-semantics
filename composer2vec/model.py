@@ -1,5 +1,6 @@
 import logging
 
+import h5py
 from keras.callbacks import EarlyStopping
 from keras.layers import Average, Concatenate, Dense, Embedding, Input, Lambda
 from keras.models import Model, load_model
@@ -76,6 +77,14 @@ class Composer2VecModel(object):
     def save(self, path):
         logger.info('Saving model to %s', path)
         self._model.save(path)
+
+    def save_composer_embeddings(self, path):
+        logger.info('Saving composer embeddings to %s', path)
+        # TODO: Name the embedding layer and then look it up by key instead
+        # of relying on ordering.
+        weights = self._model.layers[2].get_weights()[0]
+        with h5py.File(path, 'w') as f:
+            f.create_dataset("composer_embeddings", data=weights)
 
     def load(self, path):
         logger.info('Loading model from %s', path)
