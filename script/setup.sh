@@ -6,6 +6,8 @@ cd ..
 pyenv virtualenv 3.6.6 classical-semantics
 cd classical-semantics
 
+pip install --upgrade pip
+
 pip install -r requirements.txt
 
 echo "Done"
