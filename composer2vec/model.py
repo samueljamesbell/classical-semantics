@@ -36,7 +36,7 @@ class Composer2VecModel(object):
         self._model = None
 
     @property
-    def composer_embeddings(self):
+    def doc_embeddings(self):
         return np.array(self._model.layers[2].get_weights()[0])
 
     def build(self):
@@ -78,13 +78,13 @@ class Composer2VecModel(object):
         logger.info('Saving model to %s', path)
         self._model.save(path)
 
-    def save_composer_embeddings(self, path):
-        logger.info('Saving composer embeddings to %s', path)
+    def save_doc_embeddings(self, path):
+        logger.info('Saving doc embeddings to %s', path)
         # TODO: Name the embedding layer and then look it up by key instead
         # of relying on ordering.
         weights = self._model.layers[2].get_weights()[0]
         with h5py.File(path, 'w') as f:
-            f.create_dataset("composer_embeddings", data=weights)
+            f.create_dataset("doc_embeddings", data=weights)
 
     def load(self, path):
         logger.info('Loading model from %s', path)

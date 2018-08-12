@@ -7,13 +7,13 @@ import pandas as pd
 
 def _parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', help='Path to composer embeddings HDF5 file')
+    parser.add_argument('path', help='Path to doc embeddings HDF5 file')
     return parser.parse_args()
 
 
 def _load_embeddings(path):
     with h5py.File(path, 'r') as f:
-        return f.get('composer_embeddings').value
+        return f.get('doc_embeddings').value
 
 
 def _main():

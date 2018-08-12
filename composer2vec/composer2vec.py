@@ -1,10 +1,9 @@
 import argparse
 import itertools
-import pickle
 
 import nltk
 
-import data
+from data import batch, doc
 import model
 import vocab
 
@@ -23,7 +22,7 @@ def _parse_args():
                         
     parser.add_argument('--save', help='Path to save model')
     parser.add_argument('--save_vocab', help='Path to save vocab file')
-    parser.add_argument('--save_composer_embeddings', help='Path to save composer embeddings file')
+    parser.add_argument('--save_doc_embeddings', help='Path to save composer embeddings file')
     parser.add_argument('--load', help='Path to load model')
     parser.add_argument('--load_vocab', help='Path to load vocab file')
 
@@ -62,8 +61,8 @@ def _main():
         m.compile()
 
     if args.train:
-        all_data = data.batch(
-                data.data_generator(
+        all_data = batch.batch(
+                batch.data_generator(
                     token_ids_by_doc_id,
                     _DEFAULT_WINDOW_SIZE,
                     v.size))
@@ -73,8 +72,8 @@ def _main():
     if args.save:
         m.save(args.save)
 
-    if args.save_composer_embeddings:
-        m.save_composer_embeddings(args.save_composer_embeddings)
+    if args.save_doc_embeddings:
+        m.save_doc_embeddings(args.save_doc_embeddings)
 
 
 if __name__ == '__main__':
