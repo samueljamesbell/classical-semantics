@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import find_packages, setup
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
@@ -15,7 +15,7 @@ setup(
     author_email = "samueljamesbell@gmail.com",
     description = "Experiments in classical music recommendation.",
     license = "MIT",
-    packages=['composer2vec'],
+    packages=find_packages(),
     long_description=read('README.md'),
     entry_points = {
         'console_scripts': ['fetch-wikipedia-entries=composer2vec.script.fetch_wikipedia_entries:main'],
