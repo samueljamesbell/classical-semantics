@@ -1,0 +1,3 @@
+[submodule "doc2vec"]
+	path = doc2vec
+	url = https://github.com/samueljamesbell/doc2vec.git
