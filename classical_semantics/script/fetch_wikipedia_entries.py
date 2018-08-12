@@ -3,7 +3,7 @@ import os
 
 import progressbar
 
-from composer2vec.data import csv, wikipedia
+from data import csv, wikipedia
 
 
 def _parse_args():
