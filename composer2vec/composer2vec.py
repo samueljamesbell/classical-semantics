@@ -4,7 +4,7 @@ import itertools
 import nltk
 
 from data import batch, doc
-import model
+from model import dm
 import vocab
 
 
@@ -22,7 +22,7 @@ def _parse_args():
                         
     parser.add_argument('--save', help='Path to save model')
     parser.add_argument('--save_vocab', help='Path to save vocab file')
-    parser.add_argument('--save_doc_embeddings', help='Path to save composer embeddings file')
+    parser.add_argument('--save_doc_embeddings', help='Path to save doc embeddings file')
     parser.add_argument('--load', help='Path to load model')
     parser.add_argument('--load_vocab', help='Path to load vocab file')
 
@@ -52,7 +52,7 @@ def _main():
 
     token_ids_by_doc_id = {d: v.to_ids(t) for d, t in tokens_by_doc_id.items()}
 
-    m = model.Composer2VecModel(_DEFAULT_WINDOW_SIZE, v.size, num_docs)
+    m = dm.DM(_DEFAULT_WINDOW_SIZE, v.size, num_docs)
 
     if args.load:
         m.load(args.load) 

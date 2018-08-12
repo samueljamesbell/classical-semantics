@@ -26,34 +26,36 @@ def _squeeze():
     return _lambda
 
 
-class Composer2VecModel(object):
+class DM(object):
 
-    def __init__(self, window_size, vocab_size, num_composers):
+    def __init__(self, window_size, vocab_size, num_docs):
         self._window_size = window_size
         self._vocab_size = vocab_size
-        self._num_composers = num_composers
+        self._num_docs = num_docs
 
         self._model = None
 
     @property
     def doc_embeddings(self):
+        # TODO: Name the embedding layer and then look it up by key instead
+        # of relying on ordering.
         return np.array(self._model.layers[2].get_weights()[0])
 
     def build(self):
         sequence_input = Input(shape=(self._window_size,))
-        composer_input = Input(shape=(1,))
+        doc_input = Input(shape=(1,))
       
         embedded_sequence = Embedding(input_dim=self._vocab_size, output_dim=300, input_length=self._window_size)(sequence_input)
-        embedded_composer = Embedding(input_dim=self._num_composers, output_dim=300, input_length=1)(composer_input)
+        embedded_doc = Embedding(input_dim=self._num_docs, output_dim=300, input_length=1)(doc_input)
       
-        embedded = Concatenate(axis=1)([embedded_composer, embedded_sequence])
+        embedded = Concatenate(axis=1)([embedded_doc, embedded_sequence])
         split = Lambda(_split(self._window_size))(embedded)
         averaged = Average()(split)
         squeezed = Lambda(_squeeze())(averaged)
       
         softmax = Dense(self._vocab_size, activation='softmax')(squeezed)
       
-        self._model = Model(inputs=[composer_input, sequence_input], outputs=softmax)
+        self._model = Model(inputs=[doc_input, sequence_input], outputs=softmax)
 
     def compile(self, optimizer=None):
         if not optimizer:
@@ -80,11 +82,8 @@ class Composer2VecModel(object):
 
     def save_doc_embeddings(self, path):
         logger.info('Saving doc embeddings to %s', path)
-        # TODO: Name the embedding layer and then look it up by key instead
-        # of relying on ordering.
-        weights = self._model.layers[2].get_weights()[0]
         with h5py.File(path, 'w') as f:
-            f.create_dataset("doc_embeddings", data=weights)
+            f.create_dataset("doc_embeddings", data=self.doc_embeddings)
 
     def load(self, path):
         logger.info('Loading model from %s', path)

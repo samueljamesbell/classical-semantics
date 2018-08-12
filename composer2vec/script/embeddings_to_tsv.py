@@ -16,12 +16,8 @@ def _load_embeddings(path):
         return f.get('doc_embeddings').value
 
 
-def _main():
+def main():
     args = _parse_args()
 
     embeddings = _load_embeddings(args.path)
     pd.DataFrame(embeddings).to_csv(sys.stdout, sep='\t', header=False, index=False)
-
-
-if __name__ == '__main__':
-    _main()

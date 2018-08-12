@@ -18,6 +18,9 @@ setup(
     packages=find_packages(),
     long_description=read('README.md'),
     entry_points = {
-        'console_scripts': ['fetch-wikipedia-entries=composer2vec.script.fetch_wikipedia_entries:main'],
+        'console_scripts': [
+            'fetch-wikipedia-entries=composer2vec.script.fetch_wikipedia_entries:main',
+            'embeddings-to-tsv:composer2vec.script.embeddings_to_tsv:main',
+        ],
     }
 )
