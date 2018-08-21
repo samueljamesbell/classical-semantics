@@ -1,5 +1,5 @@
 import functools
-import itertools 
+import itertools
 import re
 
 from bs4 import BeautifulSoup
@@ -15,14 +15,29 @@ def soup(url):
         return BeautifulSoup(response.text, 'html.parser')
     except requests.HTTPError:
         return None
-  
+
 
 @functools.lru_cache()
 def text(soup):
     """Return main text for a given soup object."""
     if soup is None:
         return ''
-  
+
     paragraphs = soup.find(attrs={"class": "mw-parser-output"}).find_all('p')
-    all_text = ' '.join(list(itertools.chain.from_iterable(para.stripped_strings for para in paragraphs)))
+    all_text = ' '.join(list(itertools.chain.from_iterable(
+        para.stripped_strings for para in paragraphs)))
     return re.sub('\[\d*\]', '', all_text)
+
+
+def link_titles(soup):
+    """Return list of titles of links to other pages."""
+    if soup is None:
+        return []
+
+    links = []
+    for link in soup.find_all('a'):
+        href = link.get('href')
+        if href and href.startswith('/wiki'):
+            links.append(link.get('title'))
+
+    return links

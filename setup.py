@@ -19,7 +19,8 @@ setup(
     long_description=read('README.md'),
     entry_points = {
         'console_scripts': [
-            'fetch-wikipedia-entries=composer2vec.script.fetch_wikipedia_entries:main',
+            'fetch-wikipedia-entries=classical_semantics.script.fetch_wikipedia_entries:main',
+            'fetch-wikipedia-links=classical_semantics.script.fetch_wikipedia_links:main',
         ],
     }
 )

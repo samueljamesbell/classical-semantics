@@ -3,7 +3,7 @@ import os
 
 import progressbar
 
-from data import csv, wikipedia
+from classical_semantics.data import csv, wikipedia
 
 
 def _parse_args():
@@ -22,7 +22,6 @@ def main():
         composer_id = composer[0]
         url = composer[-1]
         text = wikipedia.text(wikipedia.soup(url))
-
         path = os.path.join(args.directory, '{}.txt'.format(composer_id))
         with open(path, 'w') as f:
             f.write(text)
