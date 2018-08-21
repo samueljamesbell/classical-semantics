@@ -11,3 +11,6 @@
 build/
 dist/
 *.egg-info/
+
+# Custom
+models/
