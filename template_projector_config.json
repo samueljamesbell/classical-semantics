@@ -1,0 +1,13 @@
+{
+  "embeddings": [
+    {
+      "tensorName": "composer-embeddings",
+      "tensorShape": [
+        1496,
+        300
+      ],
+      "tensorPath": "https://github.com/samueljamesbell/classical-semantics/raw/master/data/embeddings/composer-embeddings-c2v-dm-5000-10000-exclude-Unknown-era.tsv",
+      "metadataPath": "https://raw.githubusercontent.com/samueljamesbell/classical-semantics/master/data/composers-annotated-exclude-Unknown-era.tsv"
+    }
+  ]
+}
