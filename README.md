@@ -45,14 +45,15 @@ You can also use the TensorFlow Projector to explore the embedding space,
 
 1. `notebooks/playground.ipynb` will show the top 5 recommended composers for a
    given input name.
-2. `notebooks/median-rank-against-wikipedia.ipynb` evaluates our trained
-   model's outputs against the Wikipedia link-frequency benchmark.
-4. `notebooks/similarity-examples.ipynb` shows the results for a few
+2. `notebooks/dm-v-dbow.ipynb` evaluates our trained
+   models' outputs against the Wikipedia link-frequency benchmark, comparing
+   the DM and DBOW algorithms.
+4. `notebooks/similarity-examples-dbow.ipynb` shows the results for a few
    cherry-picked examples.
-3. `notebooks/similarity-pairwise.ipynb` shows cherry-picked examples
+3. `notebooks/similarity-pairwise-dbow.ipynb` shows cherry-picked examples
    becoming closer or more distant in composer space over time, as training
    progresses.
-4. `notebooks/similarity-matrices.ipynb` shows structure emerging in similarity
+4. `notebooks/similarity-matrices-dbow.ipynb` shows structure emerging in similarity
    matrices ordered by composer birth year, demonstrating that the model learns
    to group composers of similar eras.
 
